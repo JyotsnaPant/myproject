@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title> Events Search </title>
+    
+    <!-- Javascript files -->
+    <script src="//code.angularjs.org/1.5.0/angular.js"></script>
+    <script src="//code.angularjs.org/1.5.0/angular-aria.js"></script>
+    <script src="//code.angularjs.org/1.5.0/angular-animate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
+    <!-- Bootstrap CSS --> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!--
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+-->
+    <!-- MyCSS -->
+    <!-- <link rel="stylesheet" href="css/mycss.css"> -->
+    
+    <script src="files/js/myApp.js"></script>
+    <style>
+    
+    .form-group.required .control-label:after
+        {
+            content: "*";color:red;
+        }
+    
+    
+    </style>
+</head>
+<body>
+
+   <div ng-app="myApp" ng-controller="autocompleteController as ctrl" data-ng-init="init('current')" ng-submit="submitForm" class="container" style="background-color: whitesmoke;">
+      <div class="mx-auto" style="width:500px;">
+       <div class="row">
+           <div class="col-xs-12">
+               <h3> Entertainment Event Ticket Search </h3>
+               <form name="searchForm" class="form-horizontal">
+                   <div class="form-group required">
+                        <div class="row">
+                       <label for="keyword" class="col-sm-3 control-label"> Keyword </label>
+                       <div class="col-sm-9">
+                            <md-autocomplete flex
+                                md-selected-item="ctrl.selectedItem"
+                                md-search-text="ctrl.searchText"
+                                md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                md-item-text="item.name"
+                                md-delay="300"
+                                md-floating-label="Enter Artist, Team or Event Name (eg. Lakers)">
+                            <div layout="row" class="item" layout-align="start center">
+                                <span md-highlight-text="ctrl.searchText">{{item.name}}</span>  
+                            </div>
+                            </md-autocomplete>   
+                       </div>  
+                       </div>
+                   </div>
+                    <div class="form-group">
+                        <div class="row">
+                           <label for="category" class="col-sm-3 control-label"> Category </label>
+                           <div class="col-sm-4">
+                               <select class="form-control">
+                                   <option> All </option>
+                                   <option> Music </option>
+                                   <option> Sports </option>
+                                   <option> Art & Theatre </option>
+                                   <option> Film </option>
+                                   <option> Miscellaneous </option>
+                               </select>  
+                           </div>
+                       </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                           <label for="distance" class="col-sm-3 control-label"> Distance </label>
+                           <div class="col-sm-4">
+                               <input type="text" class="form-control" id="distance" ng-model="distance"/>
+                              </div>
+                              <div class="col-sm-4">
+                               <select class="form-control" ng-model="distanceUnit">
+                               <option>Miles</option>
+                               <option>Kilometers</option>    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                      <div class="row">
+                           <label for="from" class="col-sm-3 control-label"> From </label>
+                           <input type="radio" class="col-sm-1 form-control rdio" name="fromRadio" value="currrent" id="from" checked ng-model='searchBy' ng-change="init('current')"/> 
+                           <label class="">Current location</label>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3"> </label>
+                            <input type="radio" class="col-sm-1 form-control rdio" name="fromRadio" value="specified" id="from" ng-model='searchBy' ng-change="init('specified')"/>
+                            <label class=""> Other. Please specify: </label>
+                        </div>
+                        <div clas="row">
+<!--                       <label class="col-sm-3"> </label>-->
+                            <input type="text" ng-model="searchLoc" class="col-sm-7 form-control" id="distance" />
+                       </div>
+                       </div>
+                       <div class="form-group">
+                           <div class="row">
+                               <button type="submit" class="col-sm-2 btn btn-search" id="getButton" ng-click="submitForm()">
+                                <span class="glyphicon glyphicon-search"></span> Search
+                               </button> 
+                               <button type="reset" class=" col-sm-2 btn btn-info">
+                                   <span class=""></span>Clear
+                               </button>
+                           </div>
+                       </div>                 
+               </form>
+           </div>
+       </div>
+   </div>
+
+   <div id="responseDiv" ng-show="rec">
+
+    <table>
+        <th> # </th>
+        <th> Date </th>
+        <th> Event </th>
+        <th> Category </th>
+        <th> Venue </th>
+        <th> Favourite </th>
+        <tr ng-repeat="item in rec" >
+            <td> {{$index + 1}} </td>
+            <td> {{ item.dates.start.localDate }}</td>
+            <td> {{item.name}} </td>
+            <td> {{ item.type }}</td>
+            <td> {{ item._embedded.venues[0].name }}</td>
+            <td>  Link here </td>
+        </tr>
+    </table>
+    </div>
+   </div>
+   <pre id= "getResponse"> </pre>
+    
+</body>
+</html>
